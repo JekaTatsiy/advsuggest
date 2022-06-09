@@ -162,6 +162,9 @@ var _ = Describe("AdvProductRepository", func() {
 				Expect(err).Should(BeNil())
 				Expect(len(items)).Should(Equal(3))
 
+				err = repository.ChangeStateAdvSuggestByID(ctx, false, 1)
+				Expect(err).Should(HaveOccurred())
+
 			})
 		})
 	})
