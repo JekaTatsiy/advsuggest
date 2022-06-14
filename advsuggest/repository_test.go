@@ -108,13 +108,22 @@ var _ = Describe("AdvProductRepository", func() {
 				next := 4
 				suggests, next := CreateSuggests(next, 3)
 
-				//mock.ExpectExec("INSERT").WillReturnResult(sqlmock.NewResult(3,3))
-				//mock.ExpectExec("INSERT").WillReturnResult(sqlmock.NewResult(3,3))
+				mock.ExpectBegin()
+				mock.ExpectQuery("INSERT").WillReturnRows(sqlmock.NewRows(nil))
+				mock.ExpectCommit()
+				
+				mock.ExpectBegin()
+				mock.ExpectExec("DELETE").WillReturnResult(sqlmock.NewResult(1, 1))
+				mock.ExpectCommit()
+				mock.ExpectBegin()
+				mock.ExpectQuery("INSERT").WillReturnRows(sqlmock.NewRows(nil))
+				mock.ExpectCommit()
 
 				err := repository.Add(ctx, suggests, false)
-				Expect(err).Should(HaveOccurred())
+				Expect(err).ShouldNot(HaveOccurred())
+
 				err = repository.Add(ctx, suggests, true)
-				Expect(err).Should(HaveOccurred())
+				Expect(err).ShouldNot(HaveOccurred())
 			})
 		})
 		When("get list suggest", func() {
@@ -122,13 +131,19 @@ var _ = Describe("AdvProductRepository", func() {
 				next := 1
 				suggests, next := CreateSuggests(next, 10)
 
+				mock.ExpectBegin()
+				mock.ExpectQuery("INSERT").WillReturnRows(sqlmock.NewRows(nil))
+				mock.ExpectCommit()
+
 				mock.ExpectQuery("SELECT").WillReturnRows(ToMockRows(suggests))
 
 				err := repository.Add(ctx, suggests, false)
-				Expect(err).Should(HaveOccurred())
+				Expect(err).ShouldNot(HaveOccurred())
+
 
 				iter, err := repository.GetListAdvSuggest(ctx)
 				Expect(err).ShouldNot(HaveOccurred())
+
 
 				item := Repository.Item{}
 				cnt := 0
@@ -147,16 +162,28 @@ var _ = Describe("AdvProductRepository", func() {
 				suggests2, next := CreateSuggests(next, 3)
 				suggests3, next := CreateSuggests(next, 3)
 
+				mock.ExpectBegin()
+				mock.ExpectQuery("INSERT").WillReturnRows(sqlmock.NewRows(nil))
+				mock.ExpectCommit()
+
+				mock.ExpectBegin()
+				mock.ExpectQuery("INSERT").WillReturnRows(sqlmock.NewRows(nil))
+				mock.ExpectCommit()
+
+				mock.ExpectBegin()
+				mock.ExpectQuery("INSERT").WillReturnRows(sqlmock.NewRows(nil))
+				mock.ExpectCommit()
+
 				mock.ExpectQuery("SELECT").WillReturnRows(ToMockRows(
 					[]*Repository.Item{suggests1[1], suggests2[1], suggests3[1]}))
 
 				var err error
 				err = repository.Add(ctx, suggests1, false)
-				Expect(err).Should(HaveOccurred())
+				Expect(err).ShouldNot(HaveOccurred())
 				err = repository.Add(ctx, suggests2, false)
-				Expect(err).Should(HaveOccurred())
+				Expect(err).ShouldNot(HaveOccurred())
 				err = repository.Add(ctx, suggests3, false)
-				Expect(err).Should(HaveOccurred())
+				Expect(err).ShouldNot(HaveOccurred())
 
 				items, err := repository.GetAdvSuggestByIDs(ctx, []int{2, 4, 6})
 				Expect(err).Should(BeNil())
