@@ -12,13 +12,13 @@ import (
 )
 
 type Item struct {
-	ID        int `gorm:"primaryKey;autoIncrement"`
-	LinkURL   string
-	Title     string
-	Queries   pq.StringArray `gorm:"type:varchar(255)[]"`
-	Active    bool           `gorm:"index" json:"active"`
-	UpdateAT  time.Time
-	CreatedAT time.Time
+	ID        int            `gorm:"primaryKey;autoIncrement" json:"id"`
+	LinkURL   string         `gorm:"type:varchar(255)" json:"link_url"`
+	Title     string         `gorm:"type:varchar(255)" json:"title"`
+	Queries   pq.StringArray `gorm:"type:varchar(255)[]" json:"queries"`
+	Active    bool           `gorm:"index" json:"active" json:"active"`
+	UpdateAT  time.Time      `gorm:"type:timestamp" json:"update_at"`
+	CreatedAT time.Time      `gorm:"type:timestamp" json:"created_at"`
 }
 
 func (i *Item) TableName() string {

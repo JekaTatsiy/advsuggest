@@ -89,8 +89,8 @@ var _ = Describe("AdvProductRepository", func() {
 		repository = Repository.New(gdb)
 	})
 	AfterEach(func() {
-		//err := mock.ExpectationsWereMet() // make sure all expectations were met
-		//Expect(err).ShouldNot(HaveOccurred())
+		err := mock.ExpectationsWereMet() // make sure all expectations were met
+		Expect(err).ShouldNot(HaveOccurred())
 	})
 
 	Context("Public functions", func() {
